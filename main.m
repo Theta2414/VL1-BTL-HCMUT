@@ -1,11 +1,11 @@
 clc, clearvars, close all
 
-m0 = input("Nhập khối lượng ban đầu của tên lửa (kg): "); %Dương
-m_fuel = input("Nhập khối lượng ban đầu của nhiên liệu: "); %Dương
+m0 = input('Nhập khối lượng ban đầu của tên lửa (kg): '); %Dương
+m_fuel = input('Nhập khối lượng ban đầu của nhiên liệu: '); %Dương
 m_rocket = m0 - m_fuel;
-h0 = input("Nhập vị trí ban đầu của tên lửa (m): "); %Dương
-dm_dt = input("Nhập tốc độ đốt nhiên liệu (kg/s): "); %Âm
-v_air = input("Nhập vận tốc đẩy khí (m/s): "); %Dương (có dấu - trong ct)
+h0 = input('Nhập vị trí ban đầu của tên lửa (m): '); %Dương
+dm_dt = input('Nhập tốc độ đốt nhiên liệu (kg/s): '); %Âm
+v_air = input('Nhập vận tốc đẩy khí (m/s): '); %Dương (có dấu - trong ct)
 
 %Hằng số rơi tự do
 g = 9.81;
@@ -83,16 +83,16 @@ else
 end
 
 figure(1)
-plot(T, a, "w");
-xlabel("Thời gian")
-ylabel("Gia tốc")
+plot(T, a, 'w');
+xlabel('Thời gian')
+ylabel('Gia tốc')
 
 figure(2) 
-plot(T, v_t, "g");
-xlabel("Thời gian")
-ylabel("Vận tốc")
+plot(T, v_t, 'g');
+xlabel('Thời gian')
+ylabel('Vận tốc')
 
 figure(3)
-plot(T, h_t, "r");
-xlabel("Thời gian")
-ylabel("Độ cao")
+plot(T, h_t, 'r');
+xlabel('Thời gian')
+ylabel('Độ cao')
