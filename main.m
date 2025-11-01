@@ -28,8 +28,8 @@ a_t = -v_air*(dm_dt./m_t) - g;
 % Xử lý điều kiện tên lửa đứng yên trên bệ phóng (Gia tốc < 0 và ở mặt đất)
 a_t_corrected = a_t;
 for i=1:length(a_t_corrected)
-    % Chỉ thay đổi khi a < 0 VÀ h0 = 0
-    if (a_t_corrected(i) < 0) && (h0 == 0) 
+    % Chỉ thay đổi khi a < 0
+    if a_t_corrected(i) < 0
         a_t_corrected(i) = 0;
     % Thoát vòng lặp ngay khi a > 0 để tên lửa bắt đầu bay lên
     elseif a_t_corrected(i) > 0 
