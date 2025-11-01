@@ -73,10 +73,10 @@ if ~isempty(escapeIndex)
     a_escape = -v_air*dm_dt./m_escape;
     %Gia tốc khi hết nhiên liệu, đồng thời không còn chịu lực hút là 0, tạo
     %một ma trận 0 có kích thước tương đương với ma trận thời gian
-    a_empty = zeros(1, (duration + 1000 - duration - 0.01)/0.01 + 1);
+    a_empty = zeros(1, length(t_empty));    
     a = [a, -v_air*dm_dt./m_escape, a_empty];
-    v_t = cumtrapz(a);
-    h_t = cumtrapz(v_t);
+    v_t = cumtrapz(T, a);
+    h_t = cumtrapz(T, v_t);
 %Nếu không tồn tại es, tức là tên lửa sẽ bị đẩy xuống lại, mệt quá :(((
 else
     %Code
