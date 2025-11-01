@@ -1,4 +1,5 @@
 clc, clearvars, close all
+syms x;
 
 m0 = input('Nhập khối lượng ban đầu của tên lửa (kg): '); %Dương
 m_fuel = input('Nhập khối lượng ban đầu của nhiên liệu: '); %Dương
@@ -10,20 +11,12 @@ v_air = input('Nhập vận tốc đẩy khí (m/s): '); %Dương (có dấu - t
 %Hằng số rơi tự do
 g = 9.81;
 
-%Hằng số hấp dẫn
-G = 6.67e-11;
-
-%Khối lượng Trái Đất
-M = 5.97e24;
-
-%Bán kính Trái Đất
-R = 6.371e6;
-
 %Tìm t khi tên lửa hết nhiên liệu
 duration = -m_fuel/dm_dt;
 
+resolution = 1;
 %Ta khảo sát từ t = 0 đến khi hết nhiên liệu
-t = 0:0.01:duration;
+t = 0:resolution:duration;
 
 %Khối lượng tên lửa theo thời gian là
 m = m0 + dm_dt*t;
@@ -41,23 +34,37 @@ for i=1:length(a)
     end
 end
 
-%
-
 %Hàm tính tích phân tích lũy
 v_t = cumtrapz(t, a);
 h_t = cumtrapz(t, v_t) + h0;
 
+v_peak = v_t(end);
+h_peak = h_t(end);
+eq = h_peak + v_peak*x - 1/2*g*x^2 == 0;
+
+S = round(solve(eq),2);
+S = S(S>0);
+S = S(1);
+
+%Ta khảo sát thêm phần từ duration đến 0
+t_empty = duration+resolution:resolution:duration + S;
+a = [a, -g*ones(1, length(t_empty))];
+
+v_t = [v_t, v_peak - g*(t_empty - duration)];
+h_t = [h_t, h_peak + v_peak*(t_empty - duration) - 1/2*g*(t_empty - duration).^2];
+t = [t, t_empty];
+
 figure(1)
-plot(T, a, 'w');
+plot(t, a, 'w');
 xlabel('Thời gian');
 ylabel('Gia tốc');
 
 figure(2) 
-plot(T, v_t, 'g');
+plot(t, v_t, 'g');
 xlabel('Thời gian');
 ylabel('Vận tốc');
 
 figure(3)
-plot(T, h_t, 'r');
+plot(t, h_t, 'r');
 xlabel('Thời gian');
 ylabel('Độ cao');
