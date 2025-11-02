@@ -14,9 +14,10 @@ g = 9.81;
 %Tìm t khi tên lửa hết nhiên liệu
 duration = -m_fuel/dm_dt;
 
-resolution = 1;
+%Chu kì
+cycle = 0.01;
 %Ta khảo sát từ t = 0 đến khi hết nhiên liệu
-t = 0:resolution:duration;
+t = 0:cycle:duration;
 
 %Khối lượng tên lửa theo thời gian là
 m = m0 + dm_dt*t;
@@ -44,12 +45,12 @@ if sum(a) ~= 0
     h_peak = h_t(end);
     eq = h_peak + v_peak*x - 1/2*g*x^2 == 0;
     
-    %S sẽ trả về kiểu dữ liệu sym, phải đổi sang double
+    %Solve sẽ trả về kiểu dữ liệu sym, phải đổi sang double
     S = round(solve(eq),2);
     S = S(S>0);
     S = double(S(1));
     %Ta khảo sát thêm phần từ duration đến 0
-    t_empty = (duration):resolution:(duration + S);
+    t_empty = (duration):cycle:(duration + S);
     a_empty = -g*ones(1, length(t_empty));
     a = [a, a_empty];
     
@@ -63,18 +64,64 @@ if sum(a) ~= 0
     t = [t, t_empty];
 end
 
+%Tìm gia tốc lớn nhất, lưu lại index, đó là điểm hết nhiên liệu
+a_max = max(a);
+
+t_fuel_end = (find(t >= duration, 1, "first"));
+t_fuel_end = t_fuel_end(1);
+%Lưu lại các giá trị mà tại đó nó hết nhiên liệu
+a_fuel_end = a(t_fuel_end);
+v_fuel_end = v_t(t_fuel_end);
+h_fuel_end = h_t(t_fuel_end);
 
 figure(1)
 plot(t, a, 'w');
+hold on; % Giữ đồ thị
+%Đánh dấu điểm hết nhiên liệu
+plot(t(t_fuel_end), a_max, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 8);
+hold off; % Trả lại
 xlabel('Thời gian');
 ylabel('Gia tốc');
+legend('Gia tốc', 'Hết nhiên liệu', 'Location', 'best'); % Thêm chú thích
 
+[v_max, t_v_max] = max(v_t);
 figure(2) 
 plot(t, v_t, 'g');
+hold on;
+%Đánh dấu điểm hết nhiên liệu
+plot(t(t_fuel_end), v_fuel_end, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 8);
+%Đánh dấu điểm bắt đầu rơi (đỉnh quỹ đạo, v~0)
+legend('Vận tốc', 'hết nhiên liệu');
+hold off;
 xlabel('Thời gian');
 ylabel('Vận tốc');
 
+[h_max, t_h_max] = max(h_t);
+
+t_h_ground = length(h_t);
+h_ground = h_t(end);
 figure(3)
 plot(t, h_t, 'r');
+hold on;
+%Đánh dấu điểm hết nhiên liệu
+plot(t(t_fuel_end), h_fuel_end, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 8);
+%Đánh dấu điểm bắt đầu rơi (đỉnh quỹ đạo), chỉ vẽ nếu tên lửa bay lên được
+if sum(a) ~= 0
+    plot(t(t_h_max), h_max, 'bs', 'MarkerFaceColor', 'b', 'MarkerSize', 8);
+end
+%Đánh dấu điểm chạm đất, chỉ vẽ nếu tên lửa bay lên đc
+if sum(a) ~= 0
+    plot(t(t_h_ground), h_ground, 'kd', 'MarkerFaceColor', 'g', 'MarkerSize', 8);
+    % Tạo chú thích
+    if ~isnan(t_h_max)
+        legend('Độ cao', 'Hết nhiên liệu', 'Đỉnh quỹ đạo', 'Chạm đất', 'Location', 'best');
+    else
+        legend('Độ cao', 'Hết nhiên liệu', 'Chạm đất', 'Location', 'best');
+    end
+else
+    legend('Độ cao', 'Hết nhiên liệu', 'Location', 'best');
+end
+%axis([0 1 0 1]);
+hold off;
 xlabel('Thời gian');
 ylabel('Độ cao');
