@@ -38,31 +38,21 @@ end
 v_t = cumtrapz(t, a);
 h_t = cumtrapz(t, v_t) + h0;
 
-%Nếu tên lửa bay lên được, nó sẽ rớt xuống được
-if sum(a) ~= 0
-    v_peak = v_t(end);
-    h_peak = h_t(end);
-    eq = h_peak + v_peak*x - 1/2*g*x^2 == 0;
-    
-    %S sẽ trả về kiểu dữ liệu sym, phải đổi sang double
-    S = round(solve(eq),2);
-    S = S(S>0);
-    S = double(S(1));
-    %Ta khảo sát thêm phần từ duration đến 0
-    t_empty = (duration):resolution:(duration + S);
-    a_empty = -g*ones(1, length(t_empty));
-    a = [a, a_empty];
-    
-    t_empty_0 = (t_empty - duration);
-    
-    v_t_empty = v_peak - g*t_empty_0;
-    v_t = [v_t, v_t_empty];
+v_peak = v_t(end);
+h_peak = h_t(end);
+eq = h_peak + v_peak*x - 1/2*g*x^2 == 0;
 
-    h_t_empty = h_peak + v_peak*t_empty_0 - 1/2*g*t_empty_0.^2;
-    h_t = [h_t, h_t_empty];
-    t = [t, t_empty];
-end
+S = round(solve(eq),2);
+S = S(S>0);
+S = S(1);
 
+%Ta khảo sát thêm phần từ duration đến 0
+t_empty = duration+resolution:resolution:duration + S;
+a = [a, -g*ones(1, length(t_empty))];
+
+v_t = [v_t, v_peak - g*(t_empty - duration)];
+h_t = [h_t, h_peak  + v_peak*(t_empty - duration) - 1/2*g*(t_empty - duration).^2];
+t = [t, t_empty];
 
 figure(1)
 plot(t, a, 'w');

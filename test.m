@@ -1,3 +1,4 @@
+tic
 clc, clearvars, close all
 
 m0 = input('Nhập khối lượng ban đầu của tên lửa (kg): '); %Dương
@@ -96,3 +97,4 @@ figure(3)
 plot(T, h_t, 'r');
 xlabel('Thời gian')
 ylabel('Độ cao')
+toc
