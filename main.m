@@ -31,23 +31,27 @@ for i=1:length(a)
     end
 end
 
-%
-
 %Ham tinh tich phan tich luy
 v_t = cumtrapz(t, a);
 h_t = cumtrapz(t, v_t) + h0;
 
 figure(1)
 plot(t, a, 'b');
-xlabel('Thoi gian');
-ylabel('Gia toc');
+title('GIA TOC THEO THOI GIAN', 'Interpreter', 'latex');
+xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
+ylabel('GIA TOC $(m/s^2)$', 'Interpreter', 'latex');
+grid on;
 
 figure(2) 
 plot(t, v_t, 'g');
-xlabel('Thoi gian');
-ylabel('Van toc');
+title('VAN TOC THEO THOI GIAN', 'Interpreter', 'latex');
+xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
+ylabel('VAN TOC $(m/s)$', 'Interpreter', 'latex');
+grid on;
 
 figure(3)
 plot(t, h_t, 'r');
-xlabel('Thoi gian');
-ylabel('Do cao');
+title('DO CAO THEO THOI GIAN', 'Interpreter', 'latex');
+xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
+ylabel('DO CAO $(m)$', 'Interpreter', 'latex');
+grid on;
