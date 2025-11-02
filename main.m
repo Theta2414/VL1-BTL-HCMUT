@@ -60,15 +60,15 @@ if sum(a) ~= 0
     t_empty_0 = (t_empty - duration);
     
     %Giá trị vận tốc tại phần rơi xuống (sau khi hết nl)
-    v_t_empty = v_peak - g*t_empty_0;
+    v_t_empty = v_peak - g*t_empty_0; %Trục thời gian tính từ mốc 0
     %Nối 2 đoạn lại
     v_t = [v_t, v_t_empty];
 
     %Giá trị độ cao tại phần rơi xuống (sau khi hết nl)
-    h_t_empty = h_peak + v_peak*t_empty_0 - 1/2*g*t_empty_0.^2;
+    h_t_empty = h_peak + v_peak*t_empty_0 - 1/2*g*t_empty_0.^2; %Trục thời gian tính từ mốc 0
     %Nối 2 đoạn lại
     h_t = [h_t, h_t_empty];
-    
+
     %Nối 2 trục thời gian
     t = [t, t_empty];
 end
@@ -76,39 +76,56 @@ end
 %Tìm gia tốc lớn nhất, lưu lại index, đó là điểm hết nhiên liệu
 a_max = max(a);
 
+%index tại điểm hết nhiên liệu
 t_fuel_end = (find(t >= duration, 1, "first"));
 t_fuel_end = t_fuel_end(1);
+
 %Lưu lại các giá trị mà tại đó nó hết nhiên liệu
 a_fuel_end = a(t_fuel_end);
 v_fuel_end = v_t(t_fuel_end);
 h_fuel_end = h_t(t_fuel_end);
+
+%index khi h_t tiếp đất
+t_h_ground = length(h_t);
+h_ground = h_t(end);
+
+[v_max, t_v_max] = max(v_t);
+v_t_ground = v_t(t_h_ground);
 
 figure(1)
 plot(t, a, 'w');
 hold on; % Giữ đồ thị
 %Đánh dấu điểm hết nhiên liệu
 plot(t(t_fuel_end), a_max, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 8);
-hold off; % Trả lại
 xlabel('Thời gian');
 ylabel('Gia tốc');
-legend('Gia tốc', 'Hết nhiên liệu', 'Location', 'best'); % Thêm chú thích
 
-[v_max, t_v_max] = max(v_t);
+%Vẽ gia tốc khi tên lửa chạm đất
+if ~sum(a) == 0
+    plot(t(t_h_ground), a(t_h_ground), 'kd', 'MarkerFaceColor', 'g', 'MarkerSize', 8);
+    legend('Gia tốc', 'Hết nhiên liệu', 'Chạm đất'); % Thêm chú thích
+else
+    legend('Gia tốc', 'Hết nhiên liệu', 'Location', 'best'); % Thêm chú thích
+end
+hold off
+
 figure(2) 
 plot(t, v_t, 'g');
 hold on;
 %Đánh dấu điểm hết nhiên liệu
 plot(t(t_fuel_end), v_fuel_end, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 8);
+%Đánh dấu điểm chạm đất
+if ~sum(a) == 0
+    plot(t(t_h_ground), v_t_ground, 'kd', 'MarkerFaceColor', 'g', 'MarkerSize', 8);
+end
 %Đánh dấu điểm bắt đầu rơi (đỉnh quỹ đạo, v~0)
-legend('Vận tốc', 'hết nhiên liệu');
+legend('Vận tốc', 'hết nhiên liệu', 'Chạm đất');
 hold off;
 xlabel('Thời gian');
 ylabel('Vận tốc');
 
 [h_max, t_h_max] = max(h_t);
 
-t_h_ground = length(h_t);
-h_ground = h_t(end);
 figure(3)
 plot(t, h_t, 'r');
 hold on;
