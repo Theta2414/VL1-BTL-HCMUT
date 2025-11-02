@@ -1,7 +1,7 @@
 clc, clearvars, close all
 
 m0 = input('Nhap khoi luong ban dau cua ten lua (kg): '); %Duong
-m_fuel = input('Nhap khoi luong ban dau cua nhien lieu: '); %Duong
+m_fuel = input('Nhap khoi luong ban dau cua nhien lieu (kg): '); %Duong
 m_rocket = m0 - m_fuel;
 h0 = input('Nhap vi tri ban dau cua ten lua (m): '); %Duong
 dm_dt = input('Nhap toc do dot nhien lieu (kg/s): '); %Am
@@ -12,6 +12,8 @@ g = 9.81;
 
 %Tim t khi ten lua het nhien lieu
 duration = -m_fuel/dm_dt;
+
+cycle = 1;
 
 %Ta khao sat tu t = 0 den khi het nhien lieu
 t = 0:0.01:duration;
@@ -35,6 +37,28 @@ end
 v_t = cumtrapz(t, a);
 h_t = cumtrapz(t, v_t) + h0;
 
+if sum(a) ~= 0
+    v_peak = v_t(end);
+    h_peak = h_t(end);
+    
+    S = roots([-0.5*g, v_peak, h_peak]);
+    S = S(S>0);
+    
+    %Ta kh?o sát thêm ph?n t? duration ??n 0
+    t_empty = (duration):cycle:(duration + S);
+    a_empty = -g*ones(1, length(t_empty));
+    a = [a, a_empty];
+    
+    t_empty_0 = (t_empty - duration);
+    
+    v_t_empty = v_peak - g*t_empty_0;
+    v_t = [v_t, v_t_empty];
+
+    h_t_empty = h_peak + v_peak*t_empty_0 - 1/2*g*t_empty_0.^2;
+    h_t = [h_t, h_t_empty];
+    t = [t, t_empty];
+end
+
 figure(1)
 plot(t, a, 'b');
 title('GIA TOC THEO THOI GIAN', 'Interpreter', 'latex');
@@ -42,7 +66,7 @@ xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
 ylabel('GIA TOC $(m/s^2)$', 'Interpreter', 'latex');
 grid on;
 
-figure(2) 
+figure(2)
 plot(t, v_t, 'g');
 title('VAN TOC THEO THOI GIAN', 'Interpreter', 'latex');
 xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
