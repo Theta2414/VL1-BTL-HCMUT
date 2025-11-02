@@ -49,18 +49,27 @@ if sum(a) ~= 0
     S = round(solve(eq),2);
     S = S(S>0);
     S = double(S(1));
-    %Ta khảo sát thêm phần từ duration đến 0
-    t_empty = (duration):cycle:(duration + S);
+    %Ta khảo sát thêm phần từ duration (hết nhiên liệu) đến khi chạm đất
+    t_empty = (duration + cycle):cycle:(duration + S);
+    %Fill gia tốc của các phần này bằng -g
     a_empty = -g*ones(1, length(t_empty));
+    %Nối hai đoạn để tạo ra a mới
     a = [a, a_empty];
     
+    %Đổi trục thời gian về 0
     t_empty_0 = (t_empty - duration);
     
+    %Giá trị vận tốc tại phần rơi xuống (sau khi hết nl)
     v_t_empty = v_peak - g*t_empty_0;
+    %Nối 2 đoạn lại
     v_t = [v_t, v_t_empty];
 
+    %Giá trị độ cao tại phần rơi xuống (sau khi hết nl)
     h_t_empty = h_peak + v_peak*t_empty_0 - 1/2*g*t_empty_0.^2;
+    %Nối 2 đoạn lại
     h_t = [h_t, h_t_empty];
+    
+    %Nối 2 trục thời gian
     t = [t, t_empty];
 end
 
