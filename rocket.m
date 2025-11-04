@@ -2,15 +2,15 @@ clc; clearvars; close all;
 
 g = 9.81;
 
-% Các thông s? s? d?ng cho bài toán (LUÔN D??NG!)
+% Cac thong so su dung cho bai toan (LUON DUONG!)
 hInit       = input('Do cao ban dau h0 (m): ');
 mRocket     = input('Tong khoi luong ban dau cua ten lua m0 (kg): ');
-% T?ng kh?i l??ng tên l?a luôn l?n h?n kh?i l??ng nhiên li?u lúc ban ??u!
+% Tong khoi luong ten lua luon lon hon khoi luong nhien lieu luc dau!
 mFuel       = input('Khoi luong nhien lieu ban dau (kg): ');
 negFuel     = input('Toc do tieu thu nhien lieu dm/dt (kg/s): ');
 vPropulsion = input('Toc do day khi v (m/s): ');
 
-% K?t qu? tính ???c khi tên l?a khi còn nhiên li?u
+% Ket qua tinh duoc khi ten lua con nhien lieu
 tUp = 0:1:(mFuel/negFuel);
 hUp = hInit + vPropulsion .* tUp ...
             - vPropulsion .* (mRocket / negFuel - tUp) ...
@@ -21,30 +21,30 @@ vUp = vPropulsion ...
     - g .* tUp;
 aUp = (vPropulsion * negFuel) ./ (mRocket - negFuel .* tUp) - g;
 
-% Nghi?m d??ng c?a ph??ng trình b?c 2 tìm th?i gian r?i c?a tên l?a
+% Nghiem duong cua phuong trinh bac 2 de tim thoi gian roi cua ten lua
 coeff = roots([- 0.5 * g, vUp(end), hUp(end)]);
 coeff = ceil(coeff(coeff > 0));
 
-% K?t qu? tính ???c khi tên l?a khi h?t nhiên li?u
+% % Ket qua tinh duoc khi ten lua het nhien lieu
 tDown = (tUp(end) + 1):1:(numel(vUp) + coeff - 2);
 hDown = hUp(end) + vUp(end) .* (1:1:length(tDown)) - 0.5 .* g .* (1:1:length(tDown)) .^ 2;
 vDown = vUp(end) - g .* (1:1:length(tDown));
 aDown = -g * ones(size(tDown));
 
-% T?ng h?p các k?t qu?
+% Tong hop cac ket qua
 tTotal = [tUp, tDown];
 hTotal = [hUp, hDown];
 vTotal = [vUp, vDown];
 aTotal = [aUp, aDown];
 
-% Ki?m tra tên l?a có th?c s? bay không
+% Kiem tra ten lua co thuc su bay khong
 if hUp(2) < 0
     hTotal(:) = 0;
     vTotal(:) = 0;
     aTotal(:) = 0;
 end;
     
-% V? ?? th? bi?u di?n k?t qu? ?ã tính ???c
+% Ve do thi bieu dien ket qua da tinh duoc
 figure(1)
 plot(tTotal, aTotal, 'b');
 title('GIA TOC THEO THOI GIAN', 'Interpreter', 'latex');
