@@ -12,7 +12,7 @@ hInit = 0;
 mRocket = 550000;
 mFuel = 500000;
 negFuel = 250;
-vPropulsion = 35000;
+vPropulsion = 3500;
 
 tUp = 0:1:(mFuel/negFuel);
 hUp = hInit + vPropulsion .* tUp ...
@@ -24,23 +24,34 @@ vUp = vPropulsion ...
     - g .* tUp;
 aUp = (vPropulsion * negFuel) ./ (mRocket - negFuel .* tUp) - g;
 
-skibidi = roots([- 0.5 * g, vUp(end), hUp(end)]);
-skibidi = ceil(skibidi(skibidi > 0));
+coeff = roots([- 0.5 * g, vUp(end), hUp(end)]);
+coeff = ceil(coeff(coeff > 0));
 
-tDown = (tUp(end) + 1):1:(numel(vUp) + skibidi - 2);
+tDown = (tUp(end) + 1):1:(numel(vUp) + coeff - 2);
 hDown = hUp(end) + vUp(end) .* [1:1:numel(tDown)] - 0.5 .* g .* [1:1:numel(tDown)] .^ 2;
 hDown = hDown(hDown > 0);
 vDown = vUp(end) - g .* [1:1:numel(tDown)];
 aDown = -g * ones(size(tDown));
 
+tTotal = [tUp, tDown];
+hTotal = [hUp, hDown];
+vTotal = [vUp, vDown];
+aTotal = [aUp, aDown];
+
+if hUp(2) < 0
+    hTotal(:) = 0;
+    vTotal(:) = 0;
+    aTotal(:) = -g;
+end;
+    
 figure(1);
-plot([tUp, tDown], [hUp, hDown], 'r');
+plot(tTotal, hTotal, 'r');
 grid on;
 
 figure(2);
-plot([tUp, tDown], [vUp, vDown], 'g');
+plot(tTotal, hTotal, 'g');
 grid on;
 
 figure(3);
-plot([tUp, tDown], [aUp, aDown], 'b');
+plot(tTotal, aTotal, 'b');
 grid on;
