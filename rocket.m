@@ -12,10 +12,10 @@ vPropulsion = input('Toc do day khi v (m/s): ');
 
 % Ket qua tinh duoc khi ten lua con nhien lieu
 tUp = 0:1:(mFuel/negFuel);
-hUp = hInit + vPropulsion .* tUp ...
-            - vPropulsion .* (mRocket / negFuel - tUp) ...
-           .* log(mRocket ./ (mRocket - negFuel .* tUp)) ...
-            - 0.5 * g .* tUp.^2;
+%hUp = hInit + vPropulsion .* tUp ...
+            %- vPropulsion .* (mRocket / negFuel - tUp) ...
+            %.* log(mRocket ./ (mRocket - negFuel .* tUp)) ...
+            %- 0.5 * g .* tUp.^2;
 
 %Kiểm tra xem tên lửa đủ gia tốc ban đầu để bay lên không
 aTest = (vPropulsion * negFuel) ./ (mRocket - negFuel .* tUp(1)) - g;
@@ -54,17 +54,26 @@ else
     coeff = ceil(coeff(coeff > 0));
 
     % Ket qua tinh duoc khi ten lua het nhien lieu
-    tDown = (tUp(end) + 1):1:(numel(vUp) + coeff - 2);
-    hDown = hUp(end) + vUp(end) .* (1:1:length(tDown)) - 0.5 .* g .* (1:1:length(tDown)) .^ 2;
-    vDown = vUp(end) - g .* (1:1:length(tDown));
-    aDown = -g * ones(size(tDown));
+    %tDown = (tUp(end) + 1):1:(numel(tUp) + 1 + )
+    tDown = linspace(tUp(end) + 1, tUp(end) + 1 + coeff, coeff + 1);
+
+    %Khi tên lửa rơi xuống, tính từ mốc 0
+    tDownRelative = 0:1:coeff;
+    hDown = hUp(end) + vUp(end) .* tDownRelative - 0.5 .*g .* tDownRelative .^2;
+    vDown = vUp(end) - g .* tDownRelative;
+    aDown = -g * ones(size(tDownRelative));
+
+    % tDown = (tUp(end) + 1):1:(numel(vUp) + coeff - 2);
+    % hDown = hUp(end) + vUp(end) .* (1:1:length(tDown)) - 0.5 .* g .* (1:1:length(tDown)) .^ 2;
+    % vDown = vUp(end) - g .* (1:1:length(tDown));
+    % aDown = -g * ones(size(tDown));
 
     % Tong hop cac ket qua
     tTotal = [tUp, tDown];
     hTotal = [hUp, hDown];
     vTotal = [vUp, vDown];
     aTotal = [aUp, aDown];
-end;
+end
 
 % Ve do thi bieu dien ket qua da tinh duoc
 figure(1)
