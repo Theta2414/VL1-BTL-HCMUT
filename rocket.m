@@ -2,21 +2,21 @@ clc; clearvars; close all;
 
 g = 9.81;
 
-% Cac thong so su dung cho bai toan (LUON DUONG!)
+%Các thông số sử dụng trong bài toán (Luôn dương)
 hInit       = input('Do cao ban dau h0 (m): ');
 mRocket     = input('Tong khoi luong ban dau cua ten lua m0 (kg): ');
-% Tong khoi luong ten lua luon lon hon khoi luong nhien lieu luc dau!
+%Tổng khối lượng tên lửa luôn lớn hơn khối lượng nhiên liệu
 mFuel       = input('Khoi luong nhien lieu ban dau (kg): ');
 negFuel     = input('Toc do tieu thu nhien lieu dm/dt (kg/s): ');
 vPropulsion = input('Toc do day khi v (m/s): ');
 
-% Ket qua tinh duoc khi ten lua con nhien lieu
+%Kết quả tính được khi tên lửa còn nhiên liệu
 tUp = 0:1:(mFuel/negFuel);
 
 %Kiểm tra xem tên lửa đủ gia tốc ban đầu để bay lên không
 aTest = (vPropulsion * negFuel) ./ (mRocket - negFuel .* tUp(1)) - g;
 
-% Kiem tra ten lua co thuc su bay khong
+%Kiểm tra tên lửa có bay lên được không
 if aTest < 0
     %takeoff = false;
     error("Tên lửa không đủ lực đẩy ban đầu để bay lên");
