@@ -12,24 +12,9 @@ vPropulsion = input('Toc do day khi v (m/s): ');
 
 % Ket qua tinh duoc khi ten lua con nhien lieu
 tUp = 0:1:(mFuel/negFuel);
-%hUp = hInit + vPropulsion .* tUp ...
-            %- vPropulsion .* (mRocket / negFuel - tUp) ...
-            %.* log(mRocket ./ (mRocket - negFuel .* tUp)) ...
-            %- 0.5 * g .* tUp.^2;
 
 %Kiểm tra xem tên lửa đủ gia tốc ban đầu để bay lên không
 aTest = (vPropulsion * negFuel) ./ (mRocket - negFuel .* tUp(1)) - g;
-
-%hUp = hInit + vPropulsion .* tUp ...
-            %- vPropulsion .* (mRocket / negFuel - tUp) ...
-            %.* log(mRocket ./ (mRocket - negFuel .* tUp)) ...
-            %- 0.5 * g .* tUp.^2;
-
-%vUp = vPropulsion ...
-        %.* log(mRocket ./ (mRocket - negFuel .* tUp)) ...
-        %- g .* tUp;
-
-%aUp = (vPropulsion * negFuel) ./ (mRocket - negFuel .* tUp) - g;
 
 % Kiem tra ten lua co thuc su bay khong
 if aTest < 0
@@ -62,11 +47,6 @@ else
     hDown = hUp(end) + vUp(end) .* tDownRelative - 0.5 .*g .* tDownRelative .^2;
     vDown = vUp(end) - g .* tDownRelative;
     aDown = -g * ones(size(tDownRelative));
-
-    % tDown = (tUp(end) + 1):1:(numel(vUp) + coeff - 2);
-    % hDown = hUp(end) + vUp(end) .* (1:1:length(tDown)) - 0.5 .* g .* (1:1:length(tDown)) .^ 2;
-    % vDown = vUp(end) - g .* (1:1:length(tDown));
-    % aDown = -g * ones(size(tDown));
 
     % Tong hop cac ket qua
     tTotal = [tUp, tDown];
