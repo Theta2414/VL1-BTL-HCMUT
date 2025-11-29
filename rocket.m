@@ -3,12 +3,12 @@ clc; clearvars; close all;
 g = 9.81;
 
 %Các thông số sử dụng trong bài toán (Luôn dương)
-hInit       = input('Do cao ban dau h0 (m): ');
-mRocket     = input('Tong khoi luong ban dau cua ten lua m0 (kg): ');
+hInit       = input('Độ cao ban đầu h0 (m): ');
+mRocket     = input('Tổng khối lượng ban đầu của tên lửa m0 (kg): ');
 %Tổng khối lượng tên lửa luôn lớn hơn khối lượng nhiên liệu
-mFuel       = input('Khoi luong nhien lieu ban dau (kg): ');
-negFuel     = input('Toc do tieu thu nhien lieu dm/dt (kg/s): ');
-vPropulsion = input('Toc do day khi v (m/s): ');
+mFuel       = input('Khối lượng nhiên liệu ban đầu (kg): ');
+negFuel     = input('Tốc độ tiêu thụ nhiên liệu dm/dt (kg/s): ');
+vPropulsion = input('Tốc độ đẩy khí (m/s): ');
 alpha       = input('Góc tạo bởi tên lửa và phương thẳng đứng: ');
 
 %Kết quả tính được khi tên lửa còn nhiên liệu
@@ -40,18 +40,18 @@ else
            .* log(mRocket ./ (mRocket - negFuel .* tUp)) * cosd(alpha) ...
             - 0.5 * g .* tUp.^2;
     
-    % Nghiem duong cua phuong trinh bac 2 de tim thoi gian roi cua ten lua
+    % Tìm nghiệm dương của phương trình bậc 2 để tìm thời gian rơi
     coeff = roots([- 0.5 * g, vyUp(end), hUp(end)]);
     coeff = ceil(coeff(coeff > 0));
 
-    % Ket qua tinh duoc khi ten lua het nhien lieu
+    % Kết quả tính được khi tên lửa hết nhiên liệu
     %tDown = (tUp(end) + 1):1:(numel(tUp) + 1 + )
     tDown = linspace(tUp(end) + 1, tUp(end) + 1 + coeff, coeff + 1);
 
     %Khi tên lửa rơi xuống, tính từ mốc 0
     tDownRelative = 0:1:coeff;
 
-    vyDown = vyUp(end) - g .* tDownRelative;
+    vyDown = vyUp(end) - g .n* tDownRelative;
     vxDown = vxUp(end) * ones(size(tDownRelative));
 
     ayDown = -g * ones(size(tDownRelative));
@@ -60,7 +60,7 @@ else
     hDown = hUp(end) + vyUp(end) .* tDownRelative - 0.5 .*g .* tDownRelative .^2;
     dDown = vxDown .* tDownRelative + dUp(end);
 
-    % Tong hop cac ket qua
+    %Tổng hợp kết quả
     tTotal = [tUp, tDown];
     hTotal = [hUp, hDown];
     vxTotal = [vxUp, vxDown];
@@ -69,7 +69,7 @@ else
     dTotal = [dUp, dDown];
 end
 
-% Ve do thi bieu dien ket qua da tinh duoc
+%Vẽ đồ thị
 figure(1)
 plot(tTotal, ayTotal, 'b');
 title('GIA TOC THEO THOI GIAN', 'Interpreter', 'latex');
