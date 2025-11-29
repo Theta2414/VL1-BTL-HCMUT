@@ -72,28 +72,28 @@ end
 %Vẽ đồ thị
 figure(1)
 plot(tTotal, ayTotal, 'b');
-title('GIA TOC THEO THOI GIAN', 'Interpreter', 'latex');
-xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
-ylabel('GIA TOC $(m/s^2)$', 'Interpreter', 'latex');
+title('Đồ thị gia tốc theo thời gian', 'Interpreter', 'latex');
+xlabel('Thời gian $(s)$', 'Interpreter', 'latex');
+ylabel('Gia tốc $(m/s^2)$', 'Interpreter', 'latex');
 grid on;
 
 figure(2)
 plot(tTotal, vyTotal, 'g');
-title('VAN TOC THEO THOI GIAN', 'Interpreter', 'latex');
-xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
-ylabel('VAN TOC $(m/s)$', 'Interpreter', 'latex');
+title('Đồ thị vận tốc theo thời gian', 'Interpreter', 'latex');
+xlabel('Thời gian $(s)$', 'Interpreter', 'latex');
+ylabel('Vận tốc $(m/s)$', 'Interpreter', 'latex');
 grid on;
 
 figure(3)
 plot(tTotal, hTotal, 'r');
-title('DO CAO THEO THOI GIAN', 'Interpreter', 'latex');
-xlabel('THOI GIAN $(s)$', 'Interpreter', 'latex');
-ylabel('DO CAO $(m)$', 'Interpreter', 'latex');
+title('Đồ thị độ cao theo thời gian', 'Interpreter', 'latex');
+xlabel('Thời gian $(s)$', 'Interpreter', 'latex');
+ylabel('Độ cao $(m)$', 'Interpreter', 'latex');
 grid on;
 
 figure(4)
 plot(dTotal, hTotal, 'r');
-title('TOA DO THEO THOI GIAN', 'Interpreter', 'latex');
-xlabel('X $(Do doi)$', 'Interpreter', 'latex');
+title('Đồ thị tọa độ theo thời gian', 'Interpreter', 'latex');
+xlabel('X $(m)$', 'Interpreter', 'latex');
 ylabel('Y $(m)$', 'Interpreter', 'latex');
 grid on;
