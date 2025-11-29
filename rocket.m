@@ -24,7 +24,7 @@ if aTest < 0
 else
     takeoff = true;
 
-    axUp = -vPropulsion * negFuel * sind(alpha) ./ (mRocket - negFuel * tUp);
+    axUp = vPropulsion * negFuel * sind(alpha) ./ (mRocket - negFuel * tUp);
     ayUp = (vPropulsion * negFuel) * cosd(alpha) ./ (mRocket - negFuel .* tUp) - g;
 
     vxUp = vPropulsion * log(mRocket ./ (mRocket - negFuel * tUp)) * sind(alpha);
@@ -55,7 +55,7 @@ else
     vxDown = vxUp(end) * ones(size(tDownRelative));
 
     ayDown = -g * ones(size(tDownRelative));
-    axDown = 0;
+    axDown = zeros(size(tDownRelative));
 
     hDown = hUp(end) + vyUp(end) .* tDownRelative - 0.5 .*g .* tDownRelative .^2;
     dDown = vxDown .* tDownRelative + dUp(end);
