@@ -51,22 +51,22 @@ else
     %Khi tên lửa rơi xuống, tính từ mốc 0
     tDownRelative = 0:1:coeff;
 
-    vyDown = vyUp(end) - g .n* tDownRelative;
-    vxDown = vxUp(end) * ones(size(tDownRelative));
+    vyDown  = vyUp(end) - g .n* tDownRelative;
+    vxDown  = vxUp(end) * ones(size(tDownRelative));
 
-    ayDown = -g * ones(size(tDownRelative));
-    axDown = zeros(size(tDownRelative));
+    ayDown  = -g * ones(size(tDownRelative));
+    axDown  = zeros(size(tDownRelative));
 
-    hDown = hUp(end) + vyUp(end) .* tDownRelative - 0.5 .*g .* tDownRelative .^2;
-    dDown = vxDown .* tDownRelative + dUp(end);
+    hDown   = hUp(end) + vyUp(end) .* tDownRelative - 0.5 .*g .* tDownRelative .^2;
+    dDown   = vxDown .* tDownRelative + dUp(end);
 
     %Tổng hợp kết quả
-    tTotal = [tUp, tDown];
-    hTotal = [hUp, hDown];
+    tTotal  = [tUp, tDown];
+    hTotal  = [hUp, hDown];
     vxTotal = [vxUp, vxDown];
     vyTotal = [vyUp, vyDown];
     ayTotal = [ayUp, ayDown];
-    dTotal = [dUp, dDown];
+    dTotal  = [dUp, dDown];
 end
 
 %Vẽ đồ thị
